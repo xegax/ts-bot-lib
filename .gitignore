@@ -7,3 +7,4 @@ node_modules
 html/styles.css
 *.log
 bots-data/**/*
+jasmine/**/*
