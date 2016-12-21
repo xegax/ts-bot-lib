@@ -1,0 +1,9 @@
+src/**/*.js
+src/**/*.js.map
+spec/**/*.js
+spec/**/*.js.map
+.tscache
+node_modules
+html/styles.css
+*.log
+bots-data/**/*
