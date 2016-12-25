@@ -18,6 +18,12 @@ export interface BotSendMessageArgs {
   reply_markup?: string; //json serialized Telegram.Bot.InlineKeyboardMarkup;
 }
 
+export interface BotSendPhotoArgs {
+  chat_id: number | string;
+  photo: string;
+  caption?: string;
+}
+
 export interface BotEditMessageArgs {
   chat_id?: number | string;
   message_id?: number;
@@ -56,15 +62,19 @@ export class TelegramRequestor {
     return this.requestor.sendData('sendMessage', {}, args);
   }
 
+  sendPhoto(args: BotSendPhotoArgs, post?: {[key: string]: any}): Promise<Telegram.Result2<Telegram.Bot.Message>> {
+    return this.requestor.sendData('sendPhoto', args, post);
+  }
+
   editMessageText(args: BotEditMessageArgs) {
     return this.requestor.sendData('editMessageText', {}, args);
   }
 
-  getChat(args: BotGetChatMemberArgs): Promise<Telegram.Bot.GroupChat> {
+  getChat(args: BotGetChatArgs): Promise<Telegram.Result2<Telegram.Bot.GroupChat>> {
     return this.requestor.getJSON('getChat', args);
   }
 
-  getChatMember(args: BotGetChatMemberArgs): Promise<Telegram.Bot.ChatMember> {
+  getChatMember(args: BotGetChatMemberArgs): Promise<Telegram.Result2<Telegram.Bot.ChatMember>> {
     return this.requestor.getJSON('getChatMember', args);
   }
 
