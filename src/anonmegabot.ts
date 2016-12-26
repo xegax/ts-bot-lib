@@ -146,7 +146,7 @@ class MyBot extends Bot<State> {
       if (args.length > 10)
         args = args.slice(0, 7) + '...';
       if (args.length)
-        this.setState({user: {name: args}});
+        this.setState({user: {name: args, fakeName: this.state.user.fakeName}});
       this.sendText('name is "' + this.state.user.name + '"');
     });
 
