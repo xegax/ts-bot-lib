@@ -24,6 +24,11 @@ export interface BotSendPhotoArgs {
   caption?: string;
 }
 
+export interface BotSendStickerArgs {
+  chat_id: number | string;
+  sticker: string;
+}
+
 export interface BotEditMessageArgs {
   chat_id?: number | string;
   message_id?: number;
@@ -64,6 +69,10 @@ export class TelegramRequestor {
 
   sendPhoto(args: BotSendPhotoArgs, post?: {[key: string]: any}): Promise<Telegram.Result2<Telegram.Bot.Message>> {
     return this.requestor.sendData('sendPhoto', args, post);
+  }
+
+  sendSticker(args: BotSendStickerArgs): Promise<Telegram.Result2<Telegram.Bot.Message>> {
+    return this.requestor.getJSON('sendSticker', args);
   }
 
   editMessageText(args: BotEditMessageArgs) {
