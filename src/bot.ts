@@ -102,6 +102,12 @@ export class Bot<T> extends Publisher {
     this.requestor.sendPhoto({photo: file_id, chat_id, caption});
   }
 
+  sendSticker(sticker: string, chat_id?: number) {
+    if (chat_id == null)
+      chat_id = this.chatId;
+    this.requestor.sendSticker({sticker, chat_id});
+  }
+
   setState(state: T) {
     let newState = assign({}, this.state, state) as T;
     if (isEqual(this.state, newState))

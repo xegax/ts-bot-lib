@@ -68,6 +68,7 @@ export module Telegram {
       forward_from?: User;
       text?: string;
       photo?: PhotoSize[];
+      sticker?: Sticker;
       new_chat_participant?: User;
       left_chat_participant?: User;
       new_chat_member?: User;
@@ -104,6 +105,15 @@ export module Telegram {
       file_size: number;
       width: number;
       height: number;
+    }
+
+    export interface Sticker {
+      file_id:	string;
+      width?: number;
+      height?: number;
+      thumb?:	PhotoSize;
+      emoji?: string;
+      file_size?: number;
     }
   }
 }

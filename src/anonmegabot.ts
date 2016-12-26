@@ -79,21 +79,17 @@ class MyBot extends Bot<State> {
     if (text.trim().length == 0)
       return;
 
-    if (this.state.tgtChat != null) {
-      if (user.fakeName)
-        text = ['"' + user.name + '"', 'said:', '\n\t', text].join(' ');
-      this.sendText(text);
-    } else {
-      this.sendText('Select chat before, like this: "/chat chat_id"');
-    }
+    if (user.fakeName)
+      text = ['"' + user.name + '"', 'said:', '\n\t', text].join(' ');
+    this.sendText(text);
   }
 
   forwardPhoto(file_id: string, user: User) {
-    if (this.state.tgtChat != null) {
-      this.sendPhoto(file_id, this.chatId, user.fakeName ? 'from "' + user.name + '"': undefined);
-    } else {
-      this.sendText('Select chat before, like this: "/chat chat_id"');
-    }
+    this.sendPhoto(file_id, this.chatId, user.fakeName ? 'from "' + user.name + '"': undefined);
+  }
+
+  forwardSticker(file_id: string, user: User) {
+    this.sendSticker(file_id, this.chatId);
   }
 
   getOrAddChatList() {
@@ -183,6 +179,8 @@ class MyBot extends Bot<State> {
       if (msg.msg.photo && msg.msg.photo.length) {
         let files = msg.msg.photo.sort((a, b) => b.width - a.width);
         groupBot.forwardPhoto(files[0].file_id, this.state.user);
+      } else if (msg.msg.sticker) {
+        groupBot.forwardSticker(msg.msg.sticker.file_id, this.state.user);
       } else {
         groupBot.forwardText(msg.cmd.getArgs(), this.state.user);
       }
