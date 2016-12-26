@@ -6,10 +6,23 @@ import {Bot, Message} from './bot';
 import {CommandDesc} from './telegram/command-desc';
 import {Telegram} from './telegram/telegram';
 import {BotsDB} from './database';
+import {assign} from 'lodash';
+import * as fs from 'fs';
 
-let userId = 107757242;
-let token = '107757242:AAHbYHmtLA_zDFWgEGr8RFdaPIb0eGeBTio';
-let requestorBase = new RequestorBase(createRequestor(), `https://api.telegram.org/bot${token}`, {timeout: 50});
+interface BotInfo {
+  token: string;
+  userAdminId: number;
+  userId: number;
+  state?: State;
+}
+
+let botInfo: BotInfo = JSON.parse(fs.readFileSync('store/anonmegabot.json').toString());
+if (!botInfo) {
+  console.log('anonmegabot.json can not be read');
+  process.exit(1);
+}
+
+let requestorBase = new RequestorBase(createRequestor(), `https://api.telegram.org/bot${botInfo.token}`, {timeout: 50});
 let telegram = new TelegramRequestor(requestorBase);
 
 interface User {
@@ -45,14 +58,11 @@ class MyBot extends Bot<State> {
     super(chatId, chatType, requestor, state);
 
     if (!this.state) {
-      let defaultChat = -159962416;
-      this.state = {
+      this.state = assign({
         chatList: {},
-        tgtChat: defaultChat,
         autoSend: true,
         user: this.makeUser()
-      };
-      this.state.chatList['' + defaultChat] = 'group-1';
+      }, botInfo.state);
 
       if (chatType != 'private') {
         this.sendText(`Hi there! Send me to private: /chat ${chatId}`);
@@ -200,8 +210,8 @@ class MyBot extends Bot<State> {
   }
 }
 
-let db = new BotsDB('bots.db');
-let botManager = new BotManager(db, userId, (chatId, chatType, state) => new MyBot(chatId, chatType, telegram, state));
+let db = new BotsDB('store/bots.db');
+let botManager = new BotManager(db, botInfo.userId, (chatId, chatType, state) => new MyBot(chatId, chatType, telegram, state));
 
 let counter = 0;
 let time = Date.now();
