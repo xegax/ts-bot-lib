@@ -178,7 +178,7 @@ class MyBot extends Bot<State> {
 
       let groupBot: MyBot = botManager.getBot(this.state.tgtChat) as any;
       if (!groupBot)
-        return this.sendText('`Invalid chat id, bot not found`');
+        return;
 
       if (msg.msg.photo && msg.msg.photo.length) {
         let files = msg.msg.photo.sort((a, b) => b.width - a.width);
