@@ -139,8 +139,8 @@ class MyBot extends Bot<State> {
 
     this.addCommand('name', (msg: Message) => {
       let args = msg.cmd.getArgs();
-      if (args.length > 10)
-        args = args.slice(0, 7) + '...';
+      if (args.length > 20)
+        args = args.slice(0, 20) + '...';
       if (args.length)
         this.setState({user: {name: args, fakeName: this.state.user.fakeName}});
       this.sendText('name is "' + this.state.user.name + '"');
