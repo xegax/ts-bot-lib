@@ -82,10 +82,14 @@ class RequestorImpl implements Requestor {
         console.log('getJSON', url);
       }
       let req = request.get(url, {timeout: (params['timeout'] * 1000 + 5000) || DEFAULT_TIMEOUT}, (err, resp, data) => {
-        if (err) {
-          return reject(err);
-        } else {
-          resolve(JSON.parse(data));
+        try {
+          if (err) {
+            return reject(err);
+          } else {
+            resolve(JSON.parse(data));
+          }
+        } catch(e) {
+          reject(e);
         }
       });
 
